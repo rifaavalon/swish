@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-r-deployment
+  labels:
+    app: test-python-r-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test-python-r-app
+  template:
+    metadata:
+      labels:
+        app: test-python-r-app
+    spec:
+      containers:
+      - name: python-r-container
+        image: ${{ secrets.DOCKER_USERNAME }}/python-r:latest
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 80
+        command: ["tail", "-f", "/dev/null"]

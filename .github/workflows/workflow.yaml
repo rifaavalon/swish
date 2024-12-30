@@ -1,4 +1,4 @@
-name: Build, Scan, and Push Docker Image
+name: Build, Scan, Push Docker Image, and Deploy to Kubernetes
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main 
 
 jobs:
-  build-scan-and-push:
+  build-scan-push-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -41,3 +41,14 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/python-r:latest
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v1
+        with:
+          version: 'latest'
+
+      - name: Deploy to Kubernetes
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        run: |
+          kubectl apply -f deployment.yaml
