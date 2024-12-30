@@ -27,3 +27,18 @@ spec:
         ports:
         - containerPort: 80
         command: ["tail", "-f", "/dev/null"]
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-r-service
+spec:
+  selector:
+    app: test-python-r-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
