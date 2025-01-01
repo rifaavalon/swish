@@ -48,31 +48,35 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/python-r:latest
 
+      - name: Set up kind
+        uses: engineerd/setup-kind@v0.5.0
+        with:
+          version: v0.11.1
+
       - name: Set up kubectl
-        uses: azure/setup-kubectl@v1
+        uses: azure/setup-kubectl@v3
         with:
           version: 'latest'
 
-      - name: Deploy to Kubernetes
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+      - name: Load Docker image into kind
+        run: kind load docker-image ${{ secrets.DOCKER_USERNAME }}/python-r:latest
+
+      - name: Deploy to kind cluster
         run: |
           kubectl apply -f deployment.yaml
 
+      - name: Wait for Pod to be Ready
+        run: |
+          kubectl wait --for=condition=ready pod -l app=test-python-r-app --timeout=300s
+
       - name: Get Deployment Status
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
           kubectl rollout status deployment/python-r-deployment
 
       - name: Get Pods Status
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
           kubectl get pods -l app=test-python-r-app
 
       - name: Get Pod Logs
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
           kubectl logs -l app=test-python-r-app
