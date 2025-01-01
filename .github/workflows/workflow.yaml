@@ -53,7 +53,7 @@ jobs:
         with:
           version: v0.11.1
 
-      - name: Set up kubectl
+      - name: Set up kubectl for kind
         uses: azure/setup-kubectl@v3
         with:
           version: 'latest'
@@ -78,3 +78,27 @@ jobs:
         run: |
           echo "Listing all events:"
           kubectl get events -A
+
+      # - name: Set up kubectl for target cluster
+      #   uses: azure/setup-kubectl@v3
+      #   with:
+      #     version: 'latest'
+      #     config-file: ${{ secrets.KUBECONFIG }}
+
+      # - name: Deploy to target cluster
+      #   run: |
+      #     kubectl apply -f deployment.yaml --kubeconfig ${{ secrets.KUBECONFIG }}
+
+      # - name: Show Pods Status in target cluster
+      #   run: |
+      #     kubectl get pods -A --kubeconfig ${{ secrets.KUBECONFIG }}
+
+      # - name: Describe Pods in target cluster
+      #   run: |
+      #     echo "Describing all pods:"
+      #     kubectl describe pods -A --kubeconfig ${{ secrets.KUBECONFIG }}
+
+      # - name: Show Events in target cluster
+      #   run: |
+      #     echo "Listing all events:"
+      #     kubectl get events -A --kubeconfig ${{ secrets.KUBECONFIG }}
