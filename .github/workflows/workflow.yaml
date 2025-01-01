@@ -65,18 +65,6 @@ jobs:
         run: |
           kubectl apply -f deployment.yaml
 
-      - name: Wait for Pod to be Ready
+      - name: Show Pods Status
         run: |
-          kubectl wait --for=condition=ready pod -l app=test-python-r-app --timeout=300s
-
-      - name: Get Deployment Status
-        run: |
-          kubectl rollout status deployment/python-r-deployment
-
-      - name: Get Pods Status
-        run: |
-          kubectl get pods -l app=test-python-r-app
-
-      - name: Get Pod Logs
-        run: |
-          kubectl logs -l app=test-python-r-app
+          kubectl get pods -A
