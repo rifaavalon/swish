@@ -68,3 +68,18 @@ jobs:
       - name: Show Pods Status
         run: |
           kubectl get pods -A
+
+      - name: Describe Pods
+        run: |
+          echo "Describing all pods:"
+          kubectl describe pods -A
+
+      - name: Show Events
+        run: |
+          echo "Listing all events:"
+          kubectl get events -A
+
+      - name: Get Pod Logs
+        run: |
+          echo "Getting logs from all pods:"
+          kubectl logs -l app=test-python-r-app
