@@ -78,8 +78,3 @@ jobs:
         run: |
           echo "Listing all events:"
           kubectl get events -A
-
-      - name: Get Pod Logs
-        run: |
-          echo "Getting logs from all pods:"
-          kubectl logs -l app=test-python-r-app
